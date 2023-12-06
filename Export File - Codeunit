@@ -1,0 +1,28 @@
+codeunit 91001 "Export File"
+{
+    trigger OnRun()
+    begin
+
+    end;
+
+    procedure GenerateTextFile()
+    Begin
+        FileNameGVar := Text001;
+        TempBlobGRec.CreateOutStream(OutstramGVar, TextEncoding::Windows);
+        OutstramGVar.WriteText(text002);
+        OutstramGVar.WriteText();
+        OutstramGVar.WriteText(text003);
+        OutstramGVar.WriteText();
+        TempBlobGRec.CreateInStream(InstreamGVar, TextEncoding::Windows);
+        DownloadFromStream(InstreamGVar, '', '', '', FileNameGVar);
+    End;
+
+    var
+        OutstramGVar: OutStream;
+        TempBlobGRec: Codeunit "Temp Blob";
+        FileNameGVar: Text;
+        InstreamGVar: InStream;
+        Text001: label 'This is the sample Test File';
+        text002: label 'Hi Team';
+        text003: Label 'Hope You Are Doing Well';
+}
