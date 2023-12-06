@@ -1,0 +1,42 @@
+codeunit 91002 "Transfer Fields"
+{
+    trigger OnRun()
+    begin
+
+    end;
+
+    var
+        WhatsappMessengerGRec: Record "Whatsapp Messenger";
+        WhatsappMessenger2GRec: Record "Whatsapp Messenger 2";
+        PurchaseandPayablesSetupGRec: Record "Purchases & Payables Setup";
+        CompanyGRec: Record Company;
+
+    procedure TransferFields(CountryCode2: code[20])
+    begin
+        Clear(PurchaseandPayablesSetupGRec);
+        PurchaseandPayablesSetupGRec.Get();
+        Clear(CompanyGRec);
+        Clear(WhatsappMessengerGRec);
+        WhatsappMessengerGRec.Reset();
+        WhatsappMessengerGRec.SetRange("country code", CountryCode2);
+        if WhatsappMessengerGRec.FindFirst() then;
+        if CompanyGRec.Get(PurchaseandPayablesSetupGRec."Freight Company") then;
+
+        Clear(WhatsappMessenger2GRec);
+        WhatsappMessenger2GRec.Reset();
+        Message(Format(CompanyGRec.Name));
+        WhatsappMessenger2GRec.SetRange("country code", CountryCode2);
+        if WhatsappMessenger2GRec.FindFirst() then begin
+            Message('Insert Country code');
+            WhatsappMessenger2GRec.ChangeCompany('CFT122');
+            WhatsappMessenger2GRec.TransferFields(WhatsappMessengerGRec);
+            WhatsappMessenger2GRec.Modify(true);
+        end
+        else begin
+            Message('Insert Country code');
+            WhatsappMessenger2GRec.ChangeCompany('CFT122');
+            WhatsappMessenger2GRec.TransferFields(WhatsappMessengerGRec);
+            WhatsappMessenger2GRec.Insert(true);
+        end;
+    end;
+}
