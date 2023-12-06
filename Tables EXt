@@ -1,0 +1,35 @@
+tableextension 91001 "Purchase Payables Setup_Ext" extends "Purchases & Payables Setup"
+{
+    fields
+    {
+        field(91000; "Freight Company"; Text[100])
+        {
+            Caption = 'Freight Company';
+            DataClassification = CustomerContent;
+        }
+    }
+}
+tableextension 91000 "Country/Region_Ext" extends "Country/Region"
+{
+    fields
+    {
+        field(83255; "WHA Dial"; Code[10])
+        {
+            Caption = 'Dial';
+            DataClassification = CustomerContent;
+
+            trigger OnValidate()
+            var
+                Constant: Text[1];
+                intLVar: Integer;
+                DialErr: Label 'Only allowed numbers and -';
+            begin
+                for intLVar := 1 to StrLen("WHA Dial") do begin
+                    Constant := CopyStr("WHA Dial", intLVar, 1);
+                    if not (Constant in ['-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) then
+                        Error(DialErr);
+                end;
+            end;
+        }
+    }
+}
